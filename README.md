@@ -48,3 +48,9 @@ export default tseslint.config({
   },
 })
 ```
+
+
+
+https://www.figma.com/design/pTDncoZE8Vtg4xtd27taL6/Untitled?node-id=0-1&p=f&t=kFNXAPpZXeGsCAkH-0
+
+Figma 디자인
