@@ -20,7 +20,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* ✅ 절대 경로 지원 추가 */
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"]  // ✅ "./" 추가하여 경로 문제 해결
+    }
   },
   "include": ["src"]
 }
