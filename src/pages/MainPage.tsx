@@ -1,103 +1,417 @@
-import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { BarChart, PieChart, Pie, Cell, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Sidebar } from "@/components/ui/Sidebar";
+import React from 'react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+} from 'chart.js';
+import { Bar, Doughnut } from 'react-chartjs-2';
 
-const data = [
-  { name: "2018", value: 200 },
-  { name: "2019", value: 300 },
-  { name: "2020", value: 400 },
-  { name: "2021", value: 350 },
-  { name: "2022", value: 420 },
-  { name: "2023", value: 500 },
-  { name: "2024", value: 230 },
-];
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  ArcElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-const pieData = [
-  { name: "국제화", value: 20, color: "#6b5b95" },
-  { name: "현지화", value: 20, color: "#feb236" },
-  { name: "컨설팅", value: 15, color: "#d64161" },
-];
+const MainPage: React.FC = () => {
+  // ---------------------------------------
+  // 바 차트(연도별 표준 채택도) 데이터 & 옵션
+  // ---------------------------------------
+  const barData = {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024'],
+    datasets: [
+      {
+        label: '채택 건수',
+        data: [3, 5, 6, 2, 9, 7], // 예시 데이터
+        backgroundColor: '#4B9CFF',
+        borderRadius: 4,
+      },
+    ],
+  };
 
-const tableData = [
-  { id: 111, name: "GT-A-24-0003", code: "GT", type: "국제화", year: "2024", views: 210 },
-  { id: 112, name: "GT-A-24-0004", code: "GT", type: "국제화", year: "2024", views: 320 },
-  { id: 113, name: "GC-A-24-0004", code: "GC", type: "현지화", year: "2024", views: 242 },
-  { id: 114, name: "GC-A-24-0007", code: "GC", type: "컨설팅", year: "2024", views: 309 },
-  { id: 115, name: "GC-A-24-0012", code: "GC", type: "현지화", year: "2024", views: 322 },
-  { id: 116, name: "GT-A-23-0002", code: "GT", type: "국제화", year: "2023", views: 459 },
-  { id: 117, name: "GC-A-22-0001", code: "GC", type: "현지화", year: "2022", views: 243 },
-  { id: 118, name: "GT-A-21-0004", code: "GT", type: "컨설팅", year: "2021", views: 334 },
-  { id: 119, name: "GC-A-19-0005", code: "GC", type: "국제화", year: "2019", views: 323 },
-  { id: 120, name: "GC-A-18-0001", code: "GC", type: "국제화", year: "2018", views: 112 },
-];
+  const barOptions: any = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      title: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 2,
+        },
+      },
+    },
+  };
 
-const MainPage = () => {
+  // ---------------------------------------
+  // 도넛 차트(2025년 전체 표준 현황) 데이터 & 옵션
+  // ---------------------------------------
+  const doughnutData = {
+    labels: ['인증', '평가', '표준', '기타'],
+    datasets: [
+      {
+        data: [19, 11, 18, 4], // 예시 데이터
+        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#8BC34A'],
+        hoverBackgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#8BC34A'],
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const doughnutOptions: any = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '70%', // 도넛 두께
+    plugins: {
+      legend: {
+        display: false, // 하단 범례 수동으로 표시
+      },
+    },
+  };
+
+  // 테이블에 표시할 예시 데이터
+  const tableData = [
+    { name: 'GT-4-24-0003', code: 'GC', type: 'Type A', year: 2024 },
+    { name: 'GT-4-24-0004', code: 'GC', type: 'Type B', year: 2024 },
+    { name: 'GT-4-24-0005', code: 'GC', type: 'Type C', year: 2024 },
+    { name: 'GT-4-24-0006', code: 'GC', type: 'Type A', year: 2024 },
+    { name: 'GT-4-24-0007', code: 'GC', type: 'Type B', year: 2024 },
+    { name: 'GT-4-24-0008', code: 'GC', type: 'Type C', year: 2024 },
+    { name: 'GT-4-24-0009', code: 'GC', type: 'Type A', year: 2024 },
+    { name: 'GT-4-24-0010', code: 'GC', type: 'Type B', year: 2024 },
+  ];
+
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 p-6 bg-gray-100">
-        <div className="flex justify-between items-center mb-6">
-          <Input placeholder="Search..." className="w-1/3" />
-          <Button className="bg-blue-500 text-white px-4 py-2">Search</Button>
+    <div style={styles.container}>
+      {/* 왼쪽 사이드바 */}
+      <aside style={styles.sidebar}>
+        <div style={styles.logoArea}>
+          {/* 실제 로고 이미지가 있다면 <img src="..." alt="TTA Logo" style={{...}} /> 로 교체 */}
+          <div style={styles.ttaLogoText}>
+            <strong style={{ fontSize: 18 }}>TTA</strong>
+            <div style={{ fontSize: 12, color: '#666' }}>한국정보통신기술협회</div>
+          </div>
         </div>
-        <div className="grid grid-cols-3 gap-6">
-            <Card>
-            <Table>
-              <TableHeader>
-              <TableRow>
-                <TableHead>순번</TableHead>
-                <TableHead>이름</TableHead>
-                <TableHead>코드</TableHead>
-                <TableHead>유형</TableHead>
-                <TableHead>연도</TableHead>
-                <TableHead>조회수</TableHead>
-              </TableRow>
-              </TableHeader>
-              <TableBody>
-              {tableData.map((row) => (
-                <TableRow key={row.id}>
-                <TableCell>{row.id}</TableCell>
-                <TableCell>{row.name}</TableCell>
-                <TableCell>{row.code}</TableCell>
-                <TableCell>{row.type}</TableCell>
-                <TableCell>{row.year}</TableCell>
-                <TableCell>{row.views}</TableCell>
-                </TableRow>
-              ))}
-              </TableBody>
-            </Table>
-            </Card>
-          <Card>
-            <h3 className="text-lg font-semibold mb-4">연도별 전체 리포트</h3>
-            <ResponsiveContainer width="100%" height={150}>
-              <BarChart data={data}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#4a90e2" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-            <Card>
-            <h3 className="text-lg font-semibold mb-4">2024년 전체 리포트</h3>
-            <ResponsiveContainer width="100%" height={150}>
-              <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50}>
-                {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
+        <nav style={styles.navMenu}>
+          <ul style={styles.navList}>
+            <li style={styles.navItem}>전체</li>
+            <li style={styles.navItem}>표준</li>
+            <li style={styles.navItem}>인증</li>
+            <li style={styles.navItem}>평가</li>
+            <li style={styles.navItem}>Settings</li>
+          </ul>
+        </nav>
+      </aside>
+
+      {/* 메인 영역 */}
+      <main style={styles.main}>
+        {/* 상단 헤더 (검색 등) */}
+        <header style={styles.header}>
+          <div style={styles.headerLeft}>
+            <input
+              type="text"
+              placeholder="Search..."
+              style={styles.searchInput}
+            />
+          </div>
+          <div style={styles.headerRight}>
+            <button style={styles.searchButton}>Search</button>
+          </div>
+        </header>
+
+        {/* 컨텐츠 영역 */}
+        <div style={styles.content}>
+          {/* 테이블 영역 */}
+          <div style={styles.tableSection}>
+            <div style={styles.tableHeader}>
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button style={styles.sortButton}>Sort</button>
+                <button style={styles.filterButton}>Filter</button>
+              </div>
+            </div>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={styles.th}>Name</th>
+                  <th style={styles.th}>Code</th>
+                  <th style={styles.th}>Type</th>
+                  <th style={styles.th}>Year</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData.map((row, idx) => (
+                  <tr key={idx} style={styles.tr}>
+                    <td style={styles.td}>{row.name}</td>
+                    <td style={styles.td}>{row.code}</td>
+                    <td style={styles.td}>{row.type}</td>
+                    <td style={styles.td}>{row.year}</td>
+                  </tr>
                 ))}
-              </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            </Card>
+              </tbody>
+            </table>
+          </div>
+
+          {/* 우측 차트 영역 */}
+          <div style={styles.chartSection}>
+            {/* 바 차트 */}
+            <div style={styles.chartBlock}>
+              <div style={styles.chartTitle}>연도별 표준 채택도</div>
+              <div style={{ width: '100%', height: '200px' }}>
+                <Bar data={barData} options={barOptions} />
+              </div>
+            </div>
+
+            {/* 도넛 차트 */}
+            <div style={styles.chartBlock}>
+              <div style={styles.chartTitle}>2025년 전체 표준 현황</div>
+              <div style={{ position: 'relative', width: '100%', height: '200px' }}>
+                <Doughnut data={doughnutData} options={doughnutOptions} />
+                {/* 중앙 텍스트(총 52건) 표시 예시 */}
+                <div style={styles.doughnutCenterText}>
+                  <div style={{ fontSize: 14, color: '#333' }}>총 52건</div>
+                </div>
+              </div>
+              {/* 범례(수동) */}
+              <div style={styles.doughnutLegend}>
+                <div style={styles.legendItem}>
+                  <span style={{ ...styles.legendColor, backgroundColor: '#FF6384' }} />
+                  인증 (19)
+                </div>
+                <div style={styles.legendItem}>
+                  <span style={{ ...styles.legendColor, backgroundColor: '#36A2EB' }} />
+                  평가 (11)
+                </div>
+                <div style={styles.legendItem}>
+                  <span style={{ ...styles.legendColor, backgroundColor: '#FFCE56' }} />
+                  표준 (18)
+                </div>
+                <div style={styles.legendItem}>
+                  <span style={{ ...styles.legendColor, backgroundColor: '#8BC34A' }} />
+                  기타 (4)
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
+};
+
+// ---------------------------------------
+// 인라인 스타일 정의(비율/레이아웃 중심)
+// ---------------------------------------
+const styles: { [key: string]: React.CSSProperties } = {
+  container: {
+    display: 'flex',
+    width: '100vw',
+    height: '100vh',
+    fontFamily: '"Noto Sans KR", sans-serif',
+    color: '#333',
+    backgroundColor: '#F5F5F5',
+  },
+  // 사이드바
+  sidebar: {
+    width: '220px',
+    backgroundColor: '#FFFFFF',
+    boxShadow: '0 0 6px rgba(0,0,0,0.1)',
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  logoArea: {
+    padding: '20px',
+    borderBottom: '1px solid #eee',
+  },
+  ttaLogoText: {
+    display: 'flex',
+    flexDirection: 'column',
+    lineHeight: 1.2,
+  },
+  navMenu: {
+    flex: 1,
+    padding: '20px 0',
+  },
+  navList: {
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
+  navItem: {
+    padding: '10px 20px',
+    cursor: 'pointer',
+    fontSize: '14px',
+    color: '#333',
+  },
+
+  // 메인 영역
+  main: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  header: {
+    height: '60px',
+    backgroundColor: '#fff',
+    borderBottom: '1px solid #eee',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 20px',
+    boxSizing: 'border-box',
+  },
+  headerLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
+  headerRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '10px',
+  },
+  searchInput: {
+    width: '220px',
+    height: '36px',
+    padding: '0 10px',
+    borderRadius: '4px',
+    border: '1px solid #ccc',
+    outline: 'none',
+  },
+  searchButton: {
+    height: '36px',
+    padding: '0 16px',
+    border: 'none',
+    borderRadius: '4px',
+    backgroundColor: '#4B9CFF',
+    color: '#fff',
+    cursor: 'pointer',
+  },
+
+  // 컨텐츠 레이아웃
+  content: {
+    display: 'flex',
+    flex: 1,
+    overflow: 'hidden',
+  },
+
+  // 테이블 섹션
+  tableSection: {
+    flex: 1,
+    padding: '20px',
+    boxSizing: 'border-box',
+    overflowY: 'auto',
+  },
+  tableHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '10px',
+  },
+  sortButton: {
+    padding: '6px 12px',
+    border: '1px solid #ccc',
+    backgroundColor: '#fff',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  },
+  filterButton: {
+    padding: '6px 12px',
+    border: '1px solid #ccc',
+    backgroundColor: '#fff',
+    borderRadius: '4px',
+    cursor: 'pointer',
+  },
+  table: {
+    width: '100%',
+    borderCollapse: 'collapse',
+    backgroundColor: '#fff',
+    boxShadow: '0 0 4px rgba(0,0,0,0.05)',
+  },
+  th: {
+    textAlign: 'left',
+    padding: '12px',
+    borderBottom: '1px solid #eee',
+    backgroundColor: '#fafafa',
+    fontWeight: 'bold',
+    fontSize: '14px',
+  },
+  tr: {
+    borderBottom: '1px solid #eee',
+  },
+  td: {
+    padding: '12px',
+    fontSize: '14px',
+  },
+
+  // 차트 섹션
+  chartSection: {
+    width: '380px',
+    padding: '20px',
+    boxSizing: 'border-box',
+    backgroundColor: '#fff',
+    borderLeft: '1px solid #eee',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '20px',
+  },
+  chartBlock: {
+    width: '100%',
+    backgroundColor: '#fff',
+    padding: '10px 0',
+    boxSizing: 'border-box',
+  },
+  chartTitle: {
+    fontSize: '15px',
+    fontWeight: 'bold',
+    marginBottom: '10px',
+    paddingLeft: '10px',
+  },
+  doughnutCenterText: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    textAlign: 'center',
+    pointerEvents: 'none',
+  },
+  doughnutLegend: {
+    marginTop: '10px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '5px',
+    fontSize: '13px',
+    paddingLeft: '10px',
+  },
+  legendItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+  },
+  legendColor: {
+    display: 'inline-block',
+    width: '12px',
+    height: '12px',
+    borderRadius: '2px',
+  },
 };
 
 export default MainPage;
