@@ -399,7 +399,7 @@ const MainPage: React.FC = () => {
           <div style={styles.chartSection}>
             {/* 바 차트 */}
             <div style={styles.chartBlock}>
-              <div style={styles.chartTitle}>연도별 표준 채택도</div>
+              <div style={styles.chartTitle}>연도별 전체 리포트</div>
               <div style={{ width: '100%', height: '200px' }}>
                 <Bar data={barData} options={barOptions} />
               </div>
