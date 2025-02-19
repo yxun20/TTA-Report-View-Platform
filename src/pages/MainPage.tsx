@@ -1,3 +1,5 @@
+// src/pages/MainPage.tsx
+
 import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -12,6 +14,7 @@ import {
 } from 'chart.js';
 import { Bar, Doughnut } from 'react-chartjs-2';
 
+// 차트 초기화
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -26,12 +29,12 @@ ChartJS.register(
 // 테이블에 사용될 데이터 구조
 // ----------------------
 interface ReportData {
-  seq: number;       // 순번
-  name: string;      // 예: "GT-4-24-0003"
+  seq: number;   // 순번
+  name: string;  // 예: "GT-4-24-0003"
   code: 'GC' | 'GT';
   type: '국제화' | '현지화' | '컨설팅';
   year: number;
-  liked: boolean;    // 즐겨찾기 여부
+  liked: boolean; // 즐겨찾기 여부
 }
 
 // 사이드바 메뉴 타입
@@ -41,19 +44,46 @@ const MainPage: React.FC = () => {
   const navigate = useNavigate();
 
   // --------------------------------------------------
-  // 0) 사이드바 선택 상태 (기본값: '전체')
+  // 0) 사이드바 선택 상태
   // --------------------------------------------------
   const [selectedMenu, setSelectedMenu] = useState<MenuType>('전체');
 
   // --------------------------------------------------
-  // 1) 데이터 (예시 30개 중 일부)
+  // 1) 데이터 (예시 30개)
   // --------------------------------------------------
   const initialData: ReportData[] = [
+    // seq: 111 ~ 140
+    // 코드(GC/GT), 타입(국제화/현지화/컨설팅), 연도(2024/2023/2022/등등), liked=false
     { seq: 111, name: 'GT-4-24-0001', code: 'GT', type: '국제화',  year: 2024, liked: false },
     { seq: 112, name: 'GT-4-24-0002', code: 'GC', type: '현지화',  year: 2024, liked: false },
     { seq: 113, name: 'GT-4-24-0003', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    // ... 나머지 30개 ...
-    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2018, liked: false },
+    { seq: 114, name: 'GT-4-24-0004', code: 'GC', type: '국제화',  year: 2022, liked: false },
+    { seq: 115, name: 'GT-4-24-0005', code: 'GT', type: '현지화',  year: 2022, liked: false },
+    { seq: 116, name: 'GT-4-24-0006', code: 'GC', type: '컨설팅', year: 2024, liked: false },
+    { seq: 117, name: 'GT-4-24-0007', code: 'GT', type: '국제화',  year: 2023, liked: false },
+    { seq: 118, name: 'GT-4-24-0008', code: 'GC', type: '현지화',  year: 2024, liked: false },
+    { seq: 119, name: 'GT-4-24-0009', code: 'GT', type: '컨설팅', year: 2023, liked: false },
+    { seq: 120, name: 'GT-4-24-0010', code: 'GC', type: '국제화',  year: 2022, liked: false },
+    { seq: 121, name: 'GT-4-24-0011', code: 'GC', type: '현지화',  year: 2024, liked: false },
+    { seq: 122, name: 'GT-4-24-0012', code: 'GT', type: '국제화',  year: 2024, liked: false },
+    { seq: 123, name: 'GT-4-24-0013', code: 'GT', type: '현지화',  year: 2023, liked: false },
+    { seq: 124, name: 'GT-4-24-0014', code: 'GC', type: '컨설팅', year: 2022, liked: false },
+    { seq: 125, name: 'GT-4-24-0015', code: 'GT', type: '국제화',  year: 2022, liked: false },
+    { seq: 126, name: 'GT-4-24-0016', code: 'GC', type: '현지화',  year: 2024, liked: false },
+    { seq: 127, name: 'GT-4-24-0017', code: 'GT', type: '컨설팅', year: 2023, liked: false },
+    { seq: 128, name: 'GT-4-24-0018', code: 'GC', type: '국제화',  year: 2023, liked: false },
+    { seq: 129, name: 'GT-4-24-0019', code: 'GT', type: '현지화',  year: 2024, liked: false },
+    { seq: 130, name: 'GT-4-24-0020', code: 'GC', type: '국제화',  year: 2022, liked: false },
+    { seq: 131, name: 'GT-4-24-0021', code: 'GT', type: '현지화',  year: 2024, liked: false },
+    { seq: 132, name: 'GT-4-24-0022', code: 'GC', type: '컨설팅', year: 2023, liked: false },
+    { seq: 133, name: 'GT-4-24-0023', code: 'GT', type: '국제화',  year: 2022, liked: false },
+    { seq: 134, name: 'GT-4-24-0024', code: 'GC', type: '현지화',  year: 2022, liked: false },
+    { seq: 135, name: 'GT-4-24-0025', code: 'GT', type: '컨설팅', year: 2024, liked: false },
+    { seq: 136, name: 'GT-4-24-0026', code: 'GC', type: '국제화',  year: 2023, liked: false },
+    { seq: 137, name: 'GT-4-24-0027', code: 'GT', type: '현지화',  year: 2022, liked: false },
+    { seq: 138, name: 'GT-4-24-0028', code: 'GC', type: '컨설팅', year: 2024, liked: false },
+    { seq: 139, name: 'GT-4-24-0029', code: 'GT', type: '국제화',  year: 2024, liked: false },
+    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2022, liked: false },
   ];
 
   const [reportData, setReportData] = useState<ReportData[]>(initialData);
@@ -64,7 +94,7 @@ const MainPage: React.FC = () => {
   const handleMenuClick = (menu: MenuType) => {
     setSelectedMenu(menu);
 
-    // 사이드바 메뉴 선택 시, 기존 필터를 초기화
+    // 사이드 메뉴 선택 시, 기존 필터/페이지 초기화
     if (menu === '국제화') {
       setTypeFilter('국제화');
     } else if (menu === '현지화') {
@@ -99,7 +129,6 @@ const MainPage: React.FC = () => {
   const [yearFilter, setYearFilter] = useState<string>('');
   const [showFilterPanel, setShowFilterPanel] = useState<boolean>(false);
 
-  // 필터 개수
   const filterCount = useMemo(() => {
     let cnt = 0;
     if (codeFilter) cnt++;
@@ -114,11 +143,11 @@ const MainPage: React.FC = () => {
   const filteredSortedData = useMemo(() => {
     let result = [...reportData];
 
-    // 사이드바 메뉴 - 즐겨찾기
+    // 사이드바 메뉴 (즐겨찾기)
     if (selectedMenu === '즐겨찾기') {
-      result = result.filter((item) => item.liked === true);
+      result = result.filter((item) => item.liked);
     }
-    // 필터 적용
+    // 필터
     if (codeFilter) {
       result = result.filter((item) => item.code === codeFilter);
     }
@@ -135,23 +164,17 @@ const MainPage: React.FC = () => {
         item.name.toLowerCase().includes(lower)
       );
     }
-    // 정렬 (seq 기준)
+    // 정렬
     result.sort((a, b) => {
-      if (sortOrder === 'asc') {
-        return a.seq - b.seq;
-      } else {
-        return b.seq - a.seq;
-      }
+      if (sortOrder === 'asc') return a.seq - b.seq;
+      return b.seq - a.seq;
     });
+
     return result;
   }, [
-    reportData,
-    selectedMenu,
-    codeFilter,
-    typeFilter,
-    yearFilter,
-    searchExecuted,
-    searchTerm,
+    reportData, selectedMenu,
+    codeFilter, typeFilter, yearFilter,
+    searchExecuted, searchTerm,
     sortOrder
   ]);
 
@@ -165,7 +188,7 @@ const MainPage: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // 즐겨찾기 토글
+  // 즐겨찾기
   const handleToggleLike = (seq: number) => {
     setReportData((prev) =>
       prev.map((item) =>
@@ -175,22 +198,21 @@ const MainPage: React.FC = () => {
   };
 
   // --------------------------------------------------
-  // 5) 차트
+  // 5) 차트 (막대, 도넛)
   // --------------------------------------------------
   const getReportTitle = () => {
     if (selectedMenu === '전체' || selectedMenu === '설정') return '전체';
     return selectedMenu;
   };
 
-  // 막대 그래프
+  // (A) 막대 그래프 데이터
   const getBarChartData = () => {
     const years = [2018, 2019, 2020, 2021, 2022, 2023, 2024];
     const countByYear = years.map((yr) => {
-      let items = initialData.filter((item) => item.year === yr);
+      let items = initialData.filter((i) => i.year === yr);
 
-      // 사이드바 메뉴별로 필터링
       if (selectedMenu === '즐겨찾기') {
-        items = items.filter((i) => i.liked === true);
+        items = items.filter((i) => i.liked);
       } else if (selectedMenu === '국제화') {
         items = items.filter((i) => i.type === '국제화');
       } else if (selectedMenu === '현지화') {
@@ -234,7 +256,7 @@ const MainPage: React.FC = () => {
     },
   };
 
-  // 도넛 그래프
+  // (B) 도넛 그래프
   const [donutYear, setDonutYear] = useState<number>(2024);
 
   const handlePrevYear = () => {
@@ -245,9 +267,9 @@ const MainPage: React.FC = () => {
   };
 
   const getDonutData = () => {
-    let items = initialData.filter((item) => item.year === donutYear);
+    let items = initialData.filter((i) => i.year === donutYear);
     if (selectedMenu === '즐겨찾기') {
-      items = items.filter((i) => i.liked === true);
+      items = items.filter((i) => i.liked);
     } else if (selectedMenu === '국제화') {
       items = items.filter((i) => i.type === '국제화');
     } else if (selectedMenu === '현지화') {
@@ -255,7 +277,6 @@ const MainPage: React.FC = () => {
     } else if (selectedMenu === '컨설팅') {
       items = items.filter((i) => i.type === '컨설팅');
     }
-
     const countByType = {
       국제화: 0,
       현지화: 0,
@@ -300,11 +321,11 @@ const MainPage: React.FC = () => {
   // 6) 테이블 행 클릭 → 상세 페이지로 이동
   // --------------------------------------------------
   const handleRowClick = (row: ReportData) => {
-    // 예: name = "GT-4-24-0003" => "240003"
-    const splitted = row.name.split('-'); // ["GT", "4", "24", "0003"]
+    // name = "GT-4-24-0003" → reportId = "24" + "0003" = "240003"
+    const splitted = row.name.split('-');
     if (splitted.length === 4) {
-      const reportId = splitted[2] + splitted[3]; // "24" + "0003" = "240003"
-      // ★ 여기서 반드시 백틱(`)을 사용해야 합니다!
+      const reportId = splitted[2] + splitted[3];
+      // <-- 백틱으로 수정 -->
       navigate(`/report/${reportId}`);
     }
   };
@@ -512,7 +533,7 @@ const MainPage: React.FC = () => {
                   <tr
                     key={row.seq}
                     style={styles.tr}
-                    onClick={() => handleRowClick(row)}
+                    onClick={() => handleRowClick(row)} // 행 클릭 → 상세 이동
                   >
                     <td style={styles.td}>{row.seq}</td>
                     <td style={styles.td}>{row.name}</td>
@@ -527,7 +548,7 @@ const MainPage: React.FC = () => {
                           color: row.liked ? '#fff' : '#333',
                         }}
                         onClick={(e) => {
-                          e.stopPropagation(); // 행 클릭 이벤트 중단
+                          e.stopPropagation(); // 행 클릭 이벤트 중지
                           handleToggleLike(row.seq);
                         }}
                       >
@@ -609,9 +630,7 @@ const MainPage: React.FC = () => {
 
 export default MainPage;
 
-/* -----------------------------
-   인라인 스타일 정의
------------------------------- */
+/* 인라인 스타일들 */
 const styles: { [key: string]: React.CSSProperties } = {
   container: {
     display: 'flex',
