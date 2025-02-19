@@ -1,5 +1,3 @@
-// src/pages/ReportDetailPage.tsx
-
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -38,13 +36,20 @@ const ReportDetailPage: React.FC = () => {
 
   useEffect(() => {
     if (reportId) {
+      // ★ 반드시 백틱(`)으로 감싸야 함
       fetch(`http://10.10.8.88:8000/services/internationalizations/list/${reportId}`)
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error(`서버 오류: ${res.status}`);
+          }
+          return res.json();
+        })
         .then((data: ReportDetail) => {
           setReportDetail(data);
         })
         .catch((error) => {
           console.error('Error fetching detail:', error);
+          setReportDetail(null);
         })
         .finally(() => {
           setLoading(false);
