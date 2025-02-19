@@ -51,11 +51,38 @@ const MainPage: React.FC = () => {
   // 1) 데이터 (총 30개)
   // --------------------------------------------------
   const initialData: ReportData[] = [
+    // seq: 111 ~ 140
+    // 코드(GC/GT), 타입(국제화/현지화/컨설팅), 연도(2024/2023/2022/등등), liked=false
     { seq: 111, name: 'GT-4-24-0001', code: 'GT', type: '국제화',  year: 2024, liked: false },
     { seq: 112, name: 'GT-4-24-0002', code: 'GC', type: '현지화',  year: 2024, liked: false },
     { seq: 113, name: 'GT-4-24-0003', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    // ... 나머지 30개 ...
-    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2018, liked: false },
+    { seq: 114, name: 'GT-4-24-0004', code: 'GC', type: '국제화',  year: 2022, liked: false },
+    { seq: 115, name: 'GT-4-24-0005', code: 'GT', type: '현지화',  year: 2022, liked: false },
+    { seq: 116, name: 'GT-4-24-0006', code: 'GC', type: '컨설팅', year: 2024, liked: false },
+    { seq: 117, name: 'GT-4-24-0007', code: 'GT', type: '국제화',  year: 2023, liked: false },
+    { seq: 118, name: 'GT-4-24-0008', code: 'GC', type: '현지화',  year: 2024, liked: false },
+    { seq: 119, name: 'GT-4-24-0009', code: 'GT', type: '컨설팅', year: 2023, liked: false },
+    { seq: 120, name: 'GT-4-24-0010', code: 'GC', type: '국제화',  year: 2022, liked: false },
+    { seq: 121, name: 'GT-4-24-0011', code: 'GC', type: '현지화',  year: 2024, liked: false },
+    { seq: 122, name: 'GT-4-24-0012', code: 'GT', type: '국제화',  year: 2024, liked: false },
+    { seq: 123, name: 'GT-4-24-0013', code: 'GT', type: '현지화',  year: 2023, liked: false },
+    { seq: 124, name: 'GT-4-24-0014', code: 'GC', type: '컨설팅', year: 2022, liked: false },
+    { seq: 125, name: 'GT-4-24-0015', code: 'GT', type: '국제화',  year: 2022, liked: false },
+    { seq: 126, name: 'GT-4-24-0016', code: 'GC', type: '현지화',  year: 2024, liked: false },
+    { seq: 127, name: 'GT-4-24-0017', code: 'GT', type: '컨설팅', year: 2023, liked: false },
+    { seq: 128, name: 'GT-4-24-0018', code: 'GC', type: '국제화',  year: 2023, liked: false },
+    { seq: 129, name: 'GT-4-24-0019', code: 'GT', type: '현지화',  year: 2024, liked: false },
+    { seq: 130, name: 'GT-4-24-0020', code: 'GC', type: '국제화',  year: 2022, liked: false },
+    { seq: 131, name: 'GT-4-24-0021', code: 'GT', type: '현지화',  year: 2024, liked: false },
+    { seq: 132, name: 'GT-4-24-0022', code: 'GC', type: '컨설팅', year: 2023, liked: false },
+    { seq: 133, name: 'GT-4-24-0023', code: 'GT', type: '국제화',  year: 2022, liked: false },
+    { seq: 134, name: 'GT-4-24-0024', code: 'GC', type: '현지화',  year: 2022, liked: false },
+    { seq: 135, name: 'GT-4-24-0025', code: 'GT', type: '컨설팅', year: 2024, liked: false },
+    { seq: 136, name: 'GT-4-24-0026', code: 'GC', type: '국제화',  year: 2023, liked: false },
+    { seq: 137, name: 'GT-4-24-0027', code: 'GT', type: '현지화',  year: 2022, liked: false },
+    { seq: 138, name: 'GT-4-24-0028', code: 'GC', type: '컨설팅', year: 2024, liked: false },
+    { seq: 139, name: 'GT-4-24-0029', code: 'GT', type: '국제화',  year: 2024, liked: false },
+    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2022, liked: false },
   ];
 
   const [reportData, setReportData] = useState<ReportData[]>(initialData);
