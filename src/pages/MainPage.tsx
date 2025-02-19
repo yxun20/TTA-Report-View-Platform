@@ -1,7 +1,5 @@
-// src/pages/MainPage.tsx
-
 import React, { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom'; // 추가
+import { useNavigate } from 'react-router-dom';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -28,19 +26,19 @@ ChartJS.register(
 // 테이블에 사용될 데이터 구조
 // ----------------------
 interface ReportData {
-  seq: number;   // 순번
-  name: string;  // 예: "GT-4-24-0003"
+  seq: number;       // 순번
+  name: string;      // 예: "GT-4-24-0003"
   code: 'GC' | 'GT';
   type: '국제화' | '현지화' | '컨설팅';
   year: number;
-  liked: boolean; // 즐겨찾기 여부
+  liked: boolean;    // 즐겨찾기 여부
 }
 
 // 사이드바 메뉴 타입
 type MenuType = '전체' | '국제화' | '현지화' | '컨설팅' | '설정' | '즐겨찾기';
 
 const MainPage: React.FC = () => {
-  const navigate = useNavigate(); // 행 클릭 시 상세 페이지로 이동하기 위해 사용
+  const navigate = useNavigate();
 
   // --------------------------------------------------
   // 0) 사이드바 선택 상태 (기본값: '전체')
@@ -48,41 +46,14 @@ const MainPage: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState<MenuType>('전체');
 
   // --------------------------------------------------
-  // 1) 데이터 (총 30개)
+  // 1) 데이터 (예시 30개 중 일부)
   // --------------------------------------------------
   const initialData: ReportData[] = [
-    // seq: 111 ~ 140
-    // 코드(GC/GT), 타입(국제화/현지화/컨설팅), 연도(2024/2023/2022/등등), liked=false
     { seq: 111, name: 'GT-4-24-0001', code: 'GT', type: '국제화',  year: 2024, liked: false },
     { seq: 112, name: 'GT-4-24-0002', code: 'GC', type: '현지화',  year: 2024, liked: false },
     { seq: 113, name: 'GT-4-24-0003', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    { seq: 114, name: 'GT-4-24-0004', code: 'GC', type: '국제화',  year: 2022, liked: false },
-    { seq: 115, name: 'GT-4-24-0005', code: 'GT', type: '현지화',  year: 2022, liked: false },
-    { seq: 116, name: 'GT-4-24-0006', code: 'GC', type: '컨설팅', year: 2024, liked: false },
-    { seq: 117, name: 'GT-4-24-0007', code: 'GT', type: '국제화',  year: 2023, liked: false },
-    { seq: 118, name: 'GT-4-24-0008', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 119, name: 'GT-4-24-0009', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    { seq: 120, name: 'GT-4-24-0010', code: 'GC', type: '국제화',  year: 2022, liked: false },
-    { seq: 121, name: 'GT-4-24-0011', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 122, name: 'GT-4-24-0012', code: 'GT', type: '국제화',  year: 2024, liked: false },
-    { seq: 123, name: 'GT-4-24-0013', code: 'GT', type: '현지화',  year: 2023, liked: false },
-    { seq: 124, name: 'GT-4-24-0014', code: 'GC', type: '컨설팅', year: 2022, liked: false },
-    { seq: 125, name: 'GT-4-24-0015', code: 'GT', type: '국제화',  year: 2022, liked: false },
-    { seq: 126, name: 'GT-4-24-0016', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 127, name: 'GT-4-24-0017', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    { seq: 128, name: 'GT-4-24-0018', code: 'GC', type: '국제화',  year: 2023, liked: false },
-    { seq: 129, name: 'GT-4-24-0019', code: 'GT', type: '현지화',  year: 2024, liked: false },
-    { seq: 130, name: 'GT-4-24-0020', code: 'GC', type: '국제화',  year: 2022, liked: false },
-    { seq: 131, name: 'GT-4-24-0021', code: 'GT', type: '현지화',  year: 2024, liked: false },
-    { seq: 132, name: 'GT-4-24-0022', code: 'GC', type: '컨설팅', year: 2023, liked: false },
-    { seq: 133, name: 'GT-4-24-0023', code: 'GT', type: '국제화',  year: 2022, liked: false },
-    { seq: 134, name: 'GT-4-24-0024', code: 'GC', type: '현지화',  year: 2022, liked: false },
-    { seq: 135, name: 'GT-4-24-0025', code: 'GT', type: '컨설팅', year: 2024, liked: false },
-    { seq: 136, name: 'GT-4-24-0026', code: 'GC', type: '국제화',  year: 2023, liked: false },
-    { seq: 137, name: 'GT-4-24-0027', code: 'GT', type: '현지화',  year: 2022, liked: false },
-    { seq: 138, name: 'GT-4-24-0028', code: 'GC', type: '컨설팅', year: 2024, liked: false },
-    { seq: 139, name: 'GT-4-24-0029', code: 'GT', type: '국제화',  year: 2024, liked: false },
-    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2022, liked: false },
+    // ... 나머지 30개 ...
+    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2018, liked: false },
   ];
 
   const [reportData, setReportData] = useState<ReportData[]>(initialData);
@@ -92,7 +63,8 @@ const MainPage: React.FC = () => {
   // --------------------------------------------------
   const handleMenuClick = (menu: MenuType) => {
     setSelectedMenu(menu);
-    // ... 사이드바 메뉴 선택 시 필터 초기화 로직 ...
+
+    // 사이드바 메뉴 선택 시, 기존 필터를 초기화
     if (menu === '국제화') {
       setTypeFilter('국제화');
     } else if (menu === '현지화') {
@@ -142,11 +114,11 @@ const MainPage: React.FC = () => {
   const filteredSortedData = useMemo(() => {
     let result = [...reportData];
 
-    // 사이드바 메뉴
+    // 사이드바 메뉴 - 즐겨찾기
     if (selectedMenu === '즐겨찾기') {
       result = result.filter((item) => item.liked === true);
     }
-    // 필터
+    // 필터 적용
     if (codeFilter) {
       result = result.filter((item) => item.code === codeFilter);
     }
@@ -163,7 +135,7 @@ const MainPage: React.FC = () => {
         item.name.toLowerCase().includes(lower)
       );
     }
-    // 정렬
+    // 정렬 (seq 기준)
     result.sort((a, b) => {
       if (sortOrder === 'asc') {
         return a.seq - b.seq;
@@ -173,9 +145,13 @@ const MainPage: React.FC = () => {
     });
     return result;
   }, [
-    reportData, selectedMenu,
-    codeFilter, typeFilter, yearFilter,
-    searchExecuted, searchTerm,
+    reportData,
+    selectedMenu,
+    codeFilter,
+    typeFilter,
+    yearFilter,
+    searchExecuted,
+    searchTerm,
     sortOrder
   ]);
 
@@ -189,7 +165,7 @@ const MainPage: React.FC = () => {
     setCurrentPage(page);
   };
 
-  // 즐겨찾기
+  // 즐겨찾기 토글
   const handleToggleLike = (seq: number) => {
     setReportData((prev) =>
       prev.map((item) =>
@@ -211,6 +187,8 @@ const MainPage: React.FC = () => {
     const years = [2018, 2019, 2020, 2021, 2022, 2023, 2024];
     const countByYear = years.map((yr) => {
       let items = initialData.filter((item) => item.year === yr);
+
+      // 사이드바 메뉴별로 필터링
       if (selectedMenu === '즐겨찾기') {
         items = items.filter((i) => i.liked === true);
       } else if (selectedMenu === '국제화') {
@@ -258,6 +236,7 @@ const MainPage: React.FC = () => {
 
   // 도넛 그래프
   const [donutYear, setDonutYear] = useState<number>(2024);
+
   const handlePrevYear = () => {
     if (donutYear > 2018) setDonutYear(donutYear - 1);
   };
@@ -276,6 +255,7 @@ const MainPage: React.FC = () => {
     } else if (selectedMenu === '컨설팅') {
       items = items.filter((i) => i.type === '컨설팅');
     }
+
     const countByType = {
       국제화: 0,
       현지화: 0,
@@ -324,7 +304,8 @@ const MainPage: React.FC = () => {
     const splitted = row.name.split('-'); // ["GT", "4", "24", "0003"]
     if (splitted.length === 4) {
       const reportId = splitted[2] + splitted[3]; // "24" + "0003" = "240003"
-      navigate(`/report/${reportId}`); // 상세 페이지로 이동
+      // ★ 여기서 반드시 백틱(`)을 사용해야 합니다!
+      navigate(`/report/${reportId}`);
     }
   };
 
@@ -531,7 +512,7 @@ const MainPage: React.FC = () => {
                   <tr
                     key={row.seq}
                     style={styles.tr}
-                    onClick={() => handleRowClick(row)} // 행 클릭 시 상세 페이지로 이동
+                    onClick={() => handleRowClick(row)}
                   >
                     <td style={styles.td}>{row.seq}</td>
                     <td style={styles.td}>{row.name}</td>
@@ -546,7 +527,7 @@ const MainPage: React.FC = () => {
                           color: row.liked ? '#fff' : '#333',
                         }}
                         onClick={(e) => {
-                          e.stopPropagation(); // 행 클릭 이벤트와 구분
+                          e.stopPropagation(); // 행 클릭 이벤트 중단
                           handleToggleLike(row.seq);
                         }}
                       >
@@ -628,9 +609,10 @@ const MainPage: React.FC = () => {
 
 export default MainPage;
 
-/* 인라인 스타일들 */
+/* -----------------------------
+   인라인 스타일 정의
+------------------------------ */
 const styles: { [key: string]: React.CSSProperties } = {
-  /* ... (질문 코드 동일) ... */
   container: {
     display: 'flex',
     width: '100vw',
@@ -746,7 +728,7 @@ const styles: { [key: string]: React.CSSProperties } = {
   filterButton: {
     position: 'relative',
     padding: '6px 12px',
-    border: '1px solid #ccc', // 작은따옴표 제거
+    border: '1px solid #ccc',
     backgroundColor: '#fff',
     borderRadius: '4px',
     cursor: 'pointer',
