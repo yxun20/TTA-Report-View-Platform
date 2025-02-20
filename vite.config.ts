@@ -1,3 +1,5 @@
+// vite.config.ts
+
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'node:path';
@@ -14,8 +16,8 @@ export default defineConfig({
     },
   },
   server: {
-    host: "localhost",  // ✅ IPv6 문제 방지
-    port: 3000,  // ✅ 기본 포트(5173) 대신 3000 사용
-    strictPort: true,  // ✅ 포트 충돌 시 즉시 오류 발생
+    host: '10.10.8.50',  // ✅ IPv6 문제 방지
+    port: 3200,         // ✅ 포트 3000 사용
+    strictPort: true,   // ✅ 포트 충돌 시 즉시 오류 발생
   },
 });
