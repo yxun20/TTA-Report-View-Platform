@@ -29,16 +29,23 @@ ChartJS.register(
 // 테이블에 사용될 데이터 구조
 // ----------------------
 interface ReportData {
-  seq: number;   // 순번
-  name: string;  // 예: "GT-4-24-0003"
+  seq: number;        // 순번
+  name: string;       // 예: "GT-4-24-0003"
   code: 'GC' | 'GT';
   type: '국제화' | '현지화' | '컨설팅';
   year: number;
-  liked: boolean; // 즐겨찾기 여부
+  liked: boolean; 
+  company: string;    // 회사명
+  errorCount: number; // 오류건수
 }
 
 // 사이드바 메뉴 타입
 type MenuType = '전체' | '국제화' | '현지화' | '컨설팅' | '설정' | '즐겨찾기';
+
+// 회사명, 오류건수 임의 생성용 함수
+const companies = ['TTA', 'Samsung', 'LG', 'KT', 'SKT'];
+const randomCompany = () => companies[Math.floor(Math.random() * companies.length)];
+const randomErrorCount = () => Math.floor(Math.random() * 10) + 1;
 
 const MainPage: React.FC = () => {
   const navigate = useNavigate();
@@ -52,65 +59,65 @@ const MainPage: React.FC = () => {
   // 1) 데이터 (예시 30개)
   // --------------------------------------------------
   const initialData: ReportData[] = [
-    // seq: 111 ~ 140
-    // 코드(GC/GT), 타입(국제화/현지화/컨설팅), 연도(2024/2023/2022/등등), liked=false
-    { seq: 111, name: 'GT-4-24-0001', code: 'GT', type: '국제화',  year: 2024, liked: false },
-    { seq: 112, name: 'GT-4-24-0002', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 113, name: 'GT-4-24-0003', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    { seq: 114, name: 'GT-4-24-0004', code: 'GC', type: '국제화',  year: 2022, liked: false },
-    { seq: 115, name: 'GT-4-24-0005', code: 'GT', type: '현지화',  year: 2022, liked: false },
-    { seq: 116, name: 'GT-4-24-0006', code: 'GC', type: '컨설팅', year: 2024, liked: false },
-    { seq: 117, name: 'GT-4-24-0007', code: 'GT', type: '국제화',  year: 2023, liked: false },
-    { seq: 118, name: 'GT-4-24-0008', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 119, name: 'GT-4-24-0009', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    { seq: 120, name: 'GT-4-24-0010', code: 'GC', type: '국제화',  year: 2022, liked: false },
-    { seq: 121, name: 'GT-4-24-0011', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 122, name: 'GT-4-24-0012', code: 'GT', type: '국제화',  year: 2024, liked: false },
-    { seq: 123, name: 'GT-4-24-0013', code: 'GT', type: '현지화',  year: 2023, liked: false },
-    { seq: 124, name: 'GT-4-24-0014', code: 'GC', type: '컨설팅', year: 2022, liked: false },
-    { seq: 125, name: 'GT-4-24-0015', code: 'GT', type: '국제화',  year: 2022, liked: false },
-    { seq: 126, name: 'GT-4-24-0016', code: 'GC', type: '현지화',  year: 2024, liked: false },
-    { seq: 127, name: 'GT-4-24-0017', code: 'GT', type: '컨설팅', year: 2023, liked: false },
-    { seq: 128, name: 'GT-4-24-0018', code: 'GC', type: '국제화',  year: 2023, liked: false },
-    { seq: 129, name: 'GT-4-24-0019', code: 'GT', type: '현지화',  year: 2024, liked: false },
-    { seq: 130, name: 'GT-4-24-0020', code: 'GC', type: '국제화',  year: 2022, liked: false },
-    { seq: 131, name: 'GT-4-24-0021', code: 'GT', type: '현지화',  year: 2021, liked: false },
-    { seq: 132, name: 'GT-4-24-0022', code: 'GC', type: '컨설팅', year: 2021, liked: false },
-    { seq: 133, name: 'GT-4-24-0023', code: 'GT', type: '국제화',  year: 2021, liked: false },
-    { seq: 134, name: 'GT-4-24-0024', code: 'GC', type: '현지화',  year: 2020, liked: false },
-    { seq: 135, name: 'GT-4-24-0025', code: 'GT', type: '컨설팅', year: 2020, liked: false },
-    { seq: 136, name: 'GT-4-24-0026', code: 'GC', type: '국제화',  year: 2019, liked: false },
-    { seq: 137, name: 'GT-4-24-0027', code: 'GT', type: '현지화',  year: 2019, liked: false },
-    { seq: 138, name: 'GT-4-24-0028', code: 'GC', type: '컨설팅', year: 2019, liked: false },
-    { seq: 139, name: 'GT-4-24-0029', code: 'GT', type: '국제화',  year: 2018, liked: false },
-    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2018, liked: false },
+    { seq: 111, name: 'GT-4-24-0001', code: 'GT', type: '국제화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 112, name: 'GT-4-24-0002', code: 'GC', type: '현지화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 113, name: 'GT-4-24-0003', code: 'GT', type: '컨설팅', year: 2023, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 114, name: 'GT-4-24-0004', code: 'GC', type: '국제화',  year: 2022, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 115, name: 'GT-4-24-0005', code: 'GT', type: '현지화',  year: 2022, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 116, name: 'GT-4-24-0006', code: 'GC', type: '컨설팅', year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 117, name: 'GT-4-24-0007', code: 'GT', type: '국제화',  year: 2023, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 118, name: 'GT-4-24-0008', code: 'GC', type: '현지화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 119, name: 'GT-4-24-0009', code: 'GT', type: '컨설팅', year: 2023, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 120, name: 'GT-4-24-0010', code: 'GC', type: '국제화',  year: 2022, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 121, name: 'GT-4-24-0011', code: 'GC', type: '현지화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 122, name: 'GT-4-24-0012', code: 'GT', type: '국제화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 123, name: 'GT-4-24-0013', code: 'GT', type: '현지화',  year: 2023, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 124, name: 'GT-4-24-0014', code: 'GC', type: '컨설팅', year: 2022, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 125, name: 'GT-4-24-0015', code: 'GT', type: '국제화',  year: 2022, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 126, name: 'GT-4-24-0016', code: 'GC', type: '현지화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 127, name: 'GT-4-24-0017', code: 'GT', type: '컨설팅', year: 2023, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 128, name: 'GT-4-24-0018', code: 'GC', type: '국제화',  year: 2023, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 129, name: 'GT-4-24-0019', code: 'GT', type: '현지화',  year: 2024, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 130, name: 'GT-4-24-0020', code: 'GC', type: '국제화',  year: 2022, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 131, name: 'GT-4-24-0021', code: 'GT', type: '현지화',  year: 2021, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 132, name: 'GT-4-24-0022', code: 'GC', type: '컨설팅', year: 2021, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 133, name: 'GT-4-24-0023', code: 'GT', type: '국제화',  year: 2021, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 134, name: 'GT-4-24-0024', code: 'GC', type: '현지화',  year: 2020, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 135, name: 'GT-4-24-0025', code: 'GT', type: '컨설팅', year: 2020, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 136, name: 'GT-4-24-0026', code: 'GC', type: '국제화',  year: 2019, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 137, name: 'GT-4-24-0027', code: 'GT', type: '현지화',  year: 2019, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 138, name: 'GT-4-24-0028', code: 'GC', type: '컨설팅', year: 2019, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 139, name: 'GT-4-24-0029', code: 'GT', type: '국제화',  year: 2018, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
+    { seq: 140, name: 'GT-4-24-0030', code: 'GC', type: '현지화',  year: 2018, liked: false, company: randomCompany(), errorCount: randomErrorCount() },
   ];
 
   const [reportData, setReportData] = useState<ReportData[]>(initialData);
 
   // --------------------------------------------------
-  // 2) 사이드바 메뉴 클릭
+  // 2) 사이드바 메뉴 클릭 → 타입 체크박스 세팅
   // --------------------------------------------------
   const handleMenuClick = (menu: MenuType) => {
     setSelectedMenu(menu);
 
     // 사이드 메뉴 선택 시, 기존 필터/페이지 초기화
+    // 체크박스도 해당 메뉴에 맞게 세팅 (복수 선택 대신 단일 선택)
     if (menu === '국제화') {
-      setTypeFilter('국제화');
+      setSelectedTypes(['국제화']);
     } else if (menu === '현지화') {
-      setTypeFilter('현지화');
+      setSelectedTypes(['현지화']);
     } else if (menu === '컨설팅') {
-      setTypeFilter('컨설팅');
+      setSelectedTypes(['컨설팅']);
     } else {
-      setTypeFilter('');
+      setSelectedTypes([]); // 전체, 설정, 즐겨찾기 등
     }
-    setCodeFilter('');
+
+    setCompanyFilter('');
     setYearFilter('');
     setCurrentPage(1);
   };
 
   // --------------------------------------------------
-  // 3) 검색 기능
+  // 3) 상단 검색 기능 (기존 유지)
   // --------------------------------------------------
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchExecuted, setSearchExecuted] = useState<boolean>(false);
@@ -121,49 +128,65 @@ const MainPage: React.FC = () => {
   };
 
   // --------------------------------------------------
-  // 4) 필터 + 정렬 + 페이지네이션
+  // 4) 필터(체크박스) + 정렬 + 페이지네이션
   // --------------------------------------------------
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [codeFilter, setCodeFilter] = useState<string>('');
-  const [typeFilter, setTypeFilter] = useState<string>('');
+  // (A) 복수 선택이 가능한 Type 체크박스
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
+  const handleTypeCheck = (typeValue: string) => {
+    setSelectedTypes((prev) => {
+      if (prev.includes(typeValue)) {
+        return prev.filter((t) => t !== typeValue);
+      } else {
+        return [...prev, typeValue];
+      }
+    });
+    setCurrentPage(1);
+  };
+
+  // (B) 연도, 회사명, 정렬
   const [yearFilter, setYearFilter] = useState<string>('');
-  const [showFilterPanel, setShowFilterPanel] = useState<boolean>(false);
+  const [companyFilter, setCompanyFilter] = useState<string>('');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
-  const filterCount = useMemo(() => {
-    let cnt = 0;
-    if (codeFilter) cnt++;
-    if (typeFilter) cnt++;
-    if (yearFilter) cnt++;
-    return cnt;
-  }, [codeFilter, typeFilter, yearFilter]);
-
+  // 페이지
   const [currentPage, setCurrentPage] = useState<number>(1);
   const pageSize = 10;
 
+  // 필터링 + 정렬 + 검색
   const filteredSortedData = useMemo(() => {
     let result = [...reportData];
 
-    // 사이드바 메뉴 (즐겨찾기)
+    // 사이드바 메뉴 (즐겨찾기) 처리
     if (selectedMenu === '즐겨찾기') {
       result = result.filter((item) => item.liked);
     }
-    // 필터
-    if (codeFilter) {
-      result = result.filter((item) => item.code === codeFilter);
+
+    // 회사명 필터
+    if (companyFilter.trim() !== '') {
+      const lower = companyFilter.trim().toLowerCase();
+      result = result.filter((item) =>
+        item.company.toLowerCase().includes(lower)
+      );
     }
-    if (typeFilter) {
-      result = result.filter((item) => item.type === typeFilter);
+
+    // 체크박스 타입 필터 (복수)
+    if (selectedTypes.length > 0) {
+      result = result.filter((item) => selectedTypes.includes(item.type));
     }
+
+    // 연도 필터
     if (yearFilter) {
       result = result.filter((item) => String(item.year) === yearFilter);
     }
-    // 검색
+
+    // 검색 (Search 버튼 눌렀을 때, name 기준)
     if (searchExecuted && searchTerm.trim() !== '') {
       const lower = searchTerm.trim().toLowerCase();
       result = result.filter((item) =>
         item.name.toLowerCase().includes(lower)
       );
     }
+
     // 정렬
     result.sort((a, b) => {
       if (sortOrder === 'asc') return a.seq - b.seq;
@@ -173,7 +196,7 @@ const MainPage: React.FC = () => {
     return result;
   }, [
     reportData, selectedMenu,
-    codeFilter, typeFilter, yearFilter,
+    companyFilter, selectedTypes, yearFilter,
     searchExecuted, searchTerm,
     sortOrder
   ]);
@@ -325,7 +348,6 @@ const MainPage: React.FC = () => {
     const splitted = row.name.split('-');
     if (splitted.length === 4) {
       const reportId = splitted[2] + splitted[3];
-      // <-- 백틱으로 수정 -->
       navigate(`/report/${reportId}`);
     }
   };
@@ -430,6 +452,8 @@ const MainPage: React.FC = () => {
         <div style={styles.content}>
           {/* 테이블 영역 */}
           <div style={styles.tableSection}>
+
+            {/* (1) 상단 정렬 설정 */}
             <div style={styles.tableHeader}>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <label style={{ fontSize: 14 }}>
@@ -446,85 +470,87 @@ const MainPage: React.FC = () => {
                     <option value="desc">뒤에서부터(내림차순)</option>
                   </select>
                 </label>
-
-                <button
-                  style={styles.filterButton}
-                  onClick={() => setShowFilterPanel(!showFilterPanel)}
-                >
-                  Filter
-                  {filterCount > 0 && (
-                    <span style={styles.filterCountBadge}>{filterCount}</span>
-                  )}
-                </button>
               </div>
             </div>
 
-            {showFilterPanel && (
-              <div style={styles.filterPanel}>
-                <div>
-                  <label style={styles.filterLabel}>코드:</label>
-                  <select
-                    style={styles.selectBox}
-                    value={codeFilter}
-                    onChange={(e) => {
-                      setCodeFilter(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <option value="">전체</option>
-                    <option value="GC">GC</option>
-                    <option value="GT">GT</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label style={styles.filterLabel}>타입:</label>
-                  <select
-                    style={styles.selectBox}
-                    value={typeFilter}
-                    onChange={(e) => {
-                      setTypeFilter(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <option value="">전체</option>
-                    <option value="국제화">국제화</option>
-                    <option value="현지화">현지화</option>
-                    <option value="컨설팅">컨설팅</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label style={styles.filterLabel}>연도:</label>
-                  <select
-                    style={styles.selectBox}
-                    value={yearFilter}
-                    onChange={(e) => {
-                      setYearFilter(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <option value="">전체</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                    <option value="2020">2020</option>
-                    <option value="2019">2019</option>
-                    <option value="2018">2018</option>
-                  </select>
-                </div>
+            {/* (2) 필터 영역 (한 줄) */}
+            <div style={styles.filterRow}>
+              {/* Type 체크박스들 */}
+              <div style={styles.filterItem}>
+                <span style={styles.filterTitle}>Type</span>
+                <label style={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes('국제화')}
+                    onChange={() => handleTypeCheck('국제화')}
+                  />
+                  국제화
+                </label>
+                <label style={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes('현지화')}
+                    onChange={() => handleTypeCheck('현지화')}
+                  />
+                  현지화
+                </label>
+                <label style={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={selectedTypes.includes('컨설팅')}
+                    onChange={() => handleTypeCheck('컨설팅')}
+                  />
+                  컨설팅
+                </label>
               </div>
-            )}
 
+              {/* 연도 선택 */}
+              <div style={styles.filterItem}>
+                <span style={styles.filterTitle}>Year</span>
+                <select
+                  style={styles.selectBox}
+                  value={yearFilter}
+                  onChange={(e) => {
+                    setYearFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                >
+                  <option value="">전체</option>
+                  <option value="2024">2024</option>
+                  <option value="2023">2023</option>
+                  <option value="2022">2022</option>
+                  <option value="2021">2021</option>
+                  <option value="2020">2020</option>
+                  <option value="2019">2019</option>
+                  <option value="2018">2018</option>
+                </select>
+              </div>
+
+              {/* 회사명 검색 */}
+              <div style={styles.filterItem}>
+                <span style={styles.filterTitle}>회사명</span>
+                <input
+                  type="text"
+                  style={styles.searchCompanyInput}
+                  value={companyFilter}
+                  onChange={(e) => {
+                    setCompanyFilter(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* (3) 테이블 */}
             <table style={styles.table}>
               <thead>
                 <tr>
                   <th style={styles.th}>순번</th>
                   <th style={styles.th}>Name</th>
-                  <th style={styles.th}>Code</th>
+                  <th style={styles.th}>회사명</th>
                   <th style={styles.th}>Type</th>
                   <th style={styles.th}>Year</th>
+                  <th style={styles.th}>오류건수</th>
                   <th style={styles.th}>즐겨찾기</th>
                 </tr>
               </thead>
@@ -537,9 +563,10 @@ const MainPage: React.FC = () => {
                   >
                     <td style={styles.td}>{row.seq}</td>
                     <td style={styles.td}>{row.name}</td>
-                    <td style={styles.td}>{row.code}</td>
+                    <td style={styles.td}>{row.company}</td>
                     <td style={styles.td}>{row.type}</td>
                     <td style={styles.td}>{row.year}</td>
+                    <td style={styles.td}>{row.errorCount}</td>
                     <td style={styles.td}>
                       <button
                         style={{
@@ -560,6 +587,7 @@ const MainPage: React.FC = () => {
               </tbody>
             </table>
 
+            {/* (4) 페이지네이션 */}
             <div style={styles.pagination}>
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
@@ -732,42 +760,47 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'space-between',
     marginBottom: '10px',
   },
-  filterPanel: {
+
+  // 한 줄 필터 디자인
+  filterRow: {
     display: 'flex',
-    gap: '20px',
-    marginBottom: '10px',
-    backgroundColor: '#f9f9f9',
+    alignItems: 'center',
+    gap: '30px',
+    backgroundColor: '#F1F7FE',
+    border: '1px solid #DCE6F0',
+    borderRadius: '6px',
     padding: '10px',
-    borderRadius: '4px',
+    marginBottom: '10px',
   },
-  filterLabel: {
-    marginRight: '6px',
-    fontSize: '14px',
+  filterItem: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
   },
-  filterButton: {
-    position: 'relative',
-    padding: '6px 12px',
-    border: '1px solid #ccc',
-    backgroundColor: '#fff',
-    borderRadius: '4px',
+  filterTitle: {
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  checkboxLabel: {
+    marginRight: '10px',
     cursor: 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '4px',
+  },
+  searchCompanyInput: {
+    width: '140px',
+    padding: '4px 6px',
     fontSize: '14px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
   },
-  filterCountBadge: {
-    display: 'inline-block',
-    marginLeft: '6px',
-    width: '20px',
-    height: '20px',
-    borderRadius: '50%',
-    backgroundColor: '#4B9CFF',
-    color: '#fff',
-    textAlign: 'center',
-    lineHeight: '20px',
-    fontSize: '13px',
-  },
+
   selectBox: {
     padding: '4px 6px',
     fontSize: '14px',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
   },
   table: {
     width: '100%',
