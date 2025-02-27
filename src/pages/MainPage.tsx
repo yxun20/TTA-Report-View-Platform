@@ -143,14 +143,14 @@ const MainPage: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // (B) 연도, 회사명, 정렬
+  // (B) 연도, 회사명, 정렬, 페이지 크기
   const [yearFilter, setYearFilter] = useState<string>('');
   const [companyFilter, setCompanyFilter] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [pageSize, setPageSize] = useState<number>(10); // 페이지당 표시 개수 (기본 10)
 
   // 페이지
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 10;
 
   // 필터링 + 정렬 + 검색
   const filteredSortedData = useMemo(() => {
@@ -202,10 +202,12 @@ const MainPage: React.FC = () => {
   ]);
 
   const totalPages = Math.ceil(filteredSortedData.length / pageSize);
+
+  // 페이지네이션
   const paginatedData = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
     return filteredSortedData.slice(startIndex, startIndex + pageSize);
-  }, [filteredSortedData, currentPage]);
+  }, [filteredSortedData, currentPage, pageSize]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -453,8 +455,9 @@ const MainPage: React.FC = () => {
           {/* 테이블 영역 */}
           <div style={styles.tableSection}>
 
-            {/* (1) 상단 정렬 설정 */}
+            {/* (1) 상단 정렬 설정 & 페이지 사이즈 선택 */}
             <div style={styles.tableHeader}>
+              {/* 왼쪽: 정렬 */}
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <label style={{ fontSize: 14 }}>
                   정렬:&nbsp;
@@ -468,6 +471,25 @@ const MainPage: React.FC = () => {
                   >
                     <option value="asc">앞에서부터(오름차순)</option>
                     <option value="desc">뒤에서부터(내림차순)</option>
+                  </select>
+                </label>
+              </div>
+
+              {/* 오른쪽: 페이지당 보기 개수 */}
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <label style={{ fontSize: 14 }}>
+                  페이지당 표시:&nbsp;
+                  <select
+                    style={styles.selectBox}
+                    value={pageSize}
+                    onChange={(e) => {
+                      setPageSize(parseInt(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                  >
+                    <option value={10}>10개씩 보기</option>
+                    <option value={30}>30개씩 보기</option>
+                    <option value={50}>50개씩 보기</option>
                   </select>
                 </label>
               </div>
@@ -760,8 +782,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     justifyContent: 'space-between',
     marginBottom: '10px',
   },
-
-  // 한 줄 필터 디자인
   filterRow: {
     display: 'flex',
     alignItems: 'center',
@@ -795,7 +815,6 @@ const styles: { [key: string]: React.CSSProperties } = {
     border: '1px solid #ccc',
     borderRadius: '4px',
   },
-
   selectBox: {
     padding: '4px 6px',
     fontSize: '14px',
